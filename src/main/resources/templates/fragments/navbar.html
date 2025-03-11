@@ -1,0 +1,32 @@
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Esnaf Uygulaması</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Ana Sayfa</a></li>
+                <li class="nav-item"><a class="nav-link" href="/hakkinda">Hakkında</a></li>
+                <li class="nav-item"><a class="nav-link" href="/iletisim">İletişim</a></li>
+
+                <li class="nav-item" th:if="${session.loggedInUser == null}">
+                    <a class="nav-link" href="/auth/login">
+                        Giriş Yap
+                    </a>
+                </li>
+                
+                <li class="nav-item" th:if="${session.loggedInUser != null}">
+                    <a class="nav-link" href="/profile">
+                        <i class="fas fa-user"></i> <span th:text="${session.loggedInUser}"></span>
+                    </a>
+                </li>
+                <li class="nav-item" th:if="${session.role == 'ADMIN'}">
+    				<a class="nav-link" href="/admin/users">Admin Paneli</a>
+				</li>
+				<li class="nav-item"><a class="nav-link" href="/auth/logout">Çıkış</a></li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>

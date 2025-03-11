@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kullanıcı Listesi</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        a { text-decoration: none; color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kullanıcı Listesi</h1>
+        <a th:href="@{/admin/add}" style="border:1px solid white; border-radius:100%;background-color: #007bff; color:white; padding: 10px; padding-left: 12px; padding-right: 12px;">+</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Kullanıcı Adı</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.role}"></td>
+                    <td>
+                        <a th:href="@{/admin/edit/{id}(id=${user.id})}">Düzenle</a> |
+                        <a th:href="@{/admin/delete/{id}(id=${user.id})}">Sil</a>
+                        
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

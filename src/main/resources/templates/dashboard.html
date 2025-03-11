@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .container { margin-top: 30px; }
+        .btn-custom { margin-right: 10px; }
+        .table td, .table th { vertical-align: middle; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Admin Paneli</h1>
+<div th:if="${users}">
+    <p>Kullanıcılar listelendi: <span th:text="${#lists.size(users)}"></span> kullanıcı bulundu.</p>
+</div>
+<div th:if="${users == null}">
+    <p>Users attribute is null</p>
+</div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Kullanıcı Adı</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.role}"></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm btn-custom" data-toggle="modal" data-target="#editModal" th:data-id="${user.id}" th:data-username="${user.username}" th:data-email="${user.email}" th:data-role="${user.role}">
+                            Düzenle
+                        </button>
+                        <a th:href="@{/admin/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm">Sil</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(users)}">
+                    <td colspan="5" class="text-center">Henüz kullanıcı yok.</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Kullanıcı Düzenle</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{/admin/update}" method="post">
+                            <input type="hidden" id="userId" name="id"/>
+                            <div class="form-group">
+                                <label for="username">Kullanıcı Adı</label>
+                                <input type="text" class="form-control" id="username" name="username" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required/>
+                            </div>
+                            <div class="form-group">
+                                <label for="role">Rol</label>
+                                <select class="form-control" id="role" name="role" required>
+                                    <option value="USER">USER</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Güncelle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- JS ve Bootstrap Bağlantıları -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        // Modal açıldığında kullanıcı verilerini al ve modal içine aktar
+        $('#editModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Düzenle butonuna tıklanmış
+            var userId = button.data('id');
+            var username = button.data('username');
+            var email = button.data('email');
+            var role = button.data('role');
+            
+            var modal = $(this);
+            modal.find('#userId').val(userId);
+            modal.find('#username').val(username);
+            modal.find('#email').val(email);
+            modal.find('#role').val(role);
+        });
+    </script>
+</body>
+</html>
